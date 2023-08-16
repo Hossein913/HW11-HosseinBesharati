@@ -27,13 +27,17 @@ namespace DapperCRUD.Data.Extensions
     public class CustomOptionTagHelper : TagHelper
     {
         private readonly IBankRepository _bankRepository;
+        private readonly ICustomerRepository _customerRepository;
 
         public CustomOptionTagHelper(
             IHtmlGenerator generator,
-            IBankRepository bankRepository)
+            IBankRepository bankRepository,
+            ICustomerRepository customerRepository
+            )
         {
             _bankRepository=bankRepository;
             Generator = generator;
+            _customerRepository = customerRepository;
         }
 
         
@@ -94,6 +98,9 @@ namespace DapperCRUD.Data.Extensions
         {
             if (string.Equals(this.EntityName, "BankModel", StringComparison.OrdinalIgnoreCase))
                 return _bankRepository.GetAllAsync().Result.Select(r => new SelectListItem() { Value = r.Id.ToString(), Text = r.Name });
+            else if (string.Equals(this.EntityName, "Customers", StringComparison.OrdinalIgnoreCase))
+                return _customerRepository.GetAllAsync().Result.Select(c => new SelectListItem() { Value = c.Id.ToString(), Text = c.Name+" "+c.Family });
+
             else
                 return null;
         }

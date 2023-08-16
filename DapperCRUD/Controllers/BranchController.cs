@@ -64,11 +64,11 @@ namespace DapperCRUD.Controllers
             }
             return View(branch);
         }
-        public async Task<IActionResult> Delete(int id)
-        {
-            var _Branch = await _iBranchRepository.GetByIdAsync(id);
-            return View(_Branch);
-        }
+        //public async Task<IActionResult> Delete(int id)
+        //{
+        //    var _Branch = await _iBranchRepository.GetByIdAsync(id);
+        //    return View(_Branch);
+        //}
 
         [HttpDelete, ActionName("DeleteConfirmed")]
         public async Task<IActionResult> DeleteConfirmed(int id)

@@ -1,0 +1,48 @@
+﻿@using DapperCRUD.Data.Extensions
+@model DapperCRUD.Models.Address
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Add Address</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" method="post">
+             <div class="form-group">
+                <label asp-for="CustomerId" class="control-label"></label>
+                <div class="col-sm-4">
+                    <Select asp-for="CustomerId" class="form-control sb-chosenselect">
+                        <customoptions asp-entity-name="Customers" asp-showdefaultitem="true"></customoptions>
+                    </Select>
+                    <span asp-validation-for="CustomerId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="address" class="control-label"></label>
+                <input asp-for="address" class="form-control" />
+                <span asp-validation-for="address" class="text-danger"></span>
+            </div>
+           
+
+            <div class="form-group mt-2">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="Customer" asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

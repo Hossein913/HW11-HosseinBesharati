@@ -2,6 +2,7 @@
 using DapperCRUD.Data;
 using DapperCRUD.Models;
 using System.Data;
+using System.Numerics;
 using static Dapper.SqlMapper;
 
 namespace DapperCRUD.Repository
@@ -24,5 +25,59 @@ namespace DapperCRUD.Repository
 
         }
 
+        public async Task<Customer> GetByIdAsync(int id)
+        {
+            var query = "select * from Customer WHERE Id = @id";
+
+            using (var connection = _context.CreateConnection())
+            {
+                var result = await connection.QuerySingleOrDefaultAsync<Customer>(query, new { id });
+                return result;
+            }
+        }
+
+        public async Task Create(Customer _Customer)
+        {
+            var query = "INSERT INTO " + typeof(Customer).Name + " ([Name],[Family],[Phone],[Mobile],[NationalCode]) VALUES (@Name, @Family,@Phone,@Mobile,@NationalCode)";
+            var parameters = new DynamicParameters();
+            parameters.Add("Name", _Customer.Name, DbType.String);
+            parameters.Add("Family", _Customer.Family, DbType.String);
+            parameters.Add("Phone", _Customer.Phone, DbType.String);
+            parameters.Add("Mobile", _Customer.Mobile, DbType.String);
+            parameters.Add("NationalCode", _Customer.NationalCode, DbType.String);
+
+            using var connection = _context.CreateConnection();
+
+            await connection.ExecuteAsync(query, parameters);
+
+        }
+
+        public async Task Update(Customer _Customer)
+        {
+            var query = "UPDATE Customer SET [Name]=@Name ,[Family]=@Family ,[Phone]=@Phone ,[Mobile]=@Mobile ,[NationalCode]=@NationalCode  WHERE Id = @Id";
+            var parameters = new DynamicParameters();
+            parameters.Add("Id", _Customer.Id, DbType.Int32);
+            parameters.Add("Name", _Customer.Name, DbType.String);
+            parameters.Add("Family", _Customer.Family, DbType.String);
+            parameters.Add("Phone", _Customer.Phone, DbType.String);
+            parameters.Add("Mobile", _Customer.Mobile, DbType.String);
+            parameters.Add("NationalCode", _Customer.NationalCode, DbType.String);
+
+            using (var connection = _context.CreateConnection())
+            {
+                await connection.ExecuteAsync(query, parameters);
+            }
+        }
+        public async Task Delete(int id)
+        {
+            var query = "DELETE FROM " + typeof(Customer).Name + " WHERE Id = @id";
+            using (var connection = _context.CreateConnection())
+            {
+                await connection.ExecuteAsync(query, new { id });
+            }
+
+
+        }
     }
 }
+
